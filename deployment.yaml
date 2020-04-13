@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: centos7-default-template
+  namespace: default
+spec:
+  replicas: 1 # We want one pod for this deployment
+  template:
+    metadata:
+      labels:
+       workload.user.cattle.io/workloadselector: deployment-rms-centos7-default-template
+    spec:
+      containers:
+      - envFrom:
+        - secretRef:
+            name: example
+            optional: false
+        name: centos7-default-template
+        image: hub.rinis.cloud/library/centos7-default-template:latest
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: "2"
+        securityContext:
+          runAsNonRoot: true
+        tty: true
